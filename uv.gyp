@@ -154,11 +154,21 @@
             'src/win/winsock.c',
             'src/win/winsock.h',
           ],
-          'link_settings': {
-            'libraries': [
-              '-lws2_32.lib',
-            ],
-          },
+          'conditions': [
+            [ 'host_os=="win"', {
+              'link_settings': {
+                'libraries': [
+                  '-lws2_32.lib',
+                ],
+              },
+            },{ # host_os != win
+              'link_settings': {
+                'libraries': [
+                  '-lws2_32',
+                ],
+              },
+            }],
+          ],
         }, { # Not Windows i.e. POSIX
           'cflags': [
             '-g',
@@ -327,7 +337,13 @@
             'test/runner-win.c',
             'test/runner-win.h'
           ],
-          'libraries': [ 'ws2_32.lib' ]
+          'conditions': [
+            [ 'host_os=="win"', {
+              'libraries': [ 'ws2_32.lib' ]
+            },{ # host_os != win
+              'libraries': [ 'ws2_32' ]
+            }],
+          ],
         }, { # POSIX
           'defines': [ '_GNU_SOURCE' ],
           'sources': [
@@ -378,7 +394,13 @@
             'test/runner-win.c',
             'test/runner-win.h',
           ],
-          'libraries': [ 'ws2_32.lib' ]
+          'conditions': [
+            [ 'host_os=="win"', {
+              'libraries': [ 'ws2_32.lib' ]
+            },{ # host_os != win
+              'libraries': [ 'ws2_32' ]
+            }],
+          ],
         }, { # POSIX
           'defines': [ '_GNU_SOURCE' ],
           'sources': [
